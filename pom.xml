@@ -26,6 +26,7 @@
 	  <module>etiqet-fix</module>
       <module>etiqet-rest</module>
       <module>etiqet-websocket</module>
+	  <module>etiqet-selenium</module>
 	</modules>
 
 	<build>

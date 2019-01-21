@@ -15,11 +15,13 @@ import java.util.List;
 @XmlRootElement(name = "etiqetConfiguration", namespace = EtiqetConstants.NAMESPACE)
 public class EtiqetConfiguration implements Serializable {
 
-    private List<Protocol> protocols;
+    private List<Protocol> protocols = new ArrayList<>();
 
     private List<ClientImpl> clients = new ArrayList<>();
 
     private List<Server> servers = new ArrayList<>();
+
+    private List<BrowserImpl> browsers = new ArrayList<>();
 
     /**
      * Gets all defined protocols in the configuration.
@@ -82,5 +84,16 @@ public class EtiqetConfiguration implements Serializable {
      */
     public void setServers(List<Server> servers) {
         this.servers = servers;
+    }
+
+
+    @XmlElementWrapper(name="browsers", namespace=EtiqetConstants.NAMESPACE)
+    @XmlElement(name="browser", namespace=EtiqetConstants.NAMESPACE)
+    public List<BrowserImpl> getBrowsers() {
+        return browsers;
+    }
+
+    public void setBrowsers(List<BrowserImpl> browsers) {
+        this.browsers = browsers;
     }
 }

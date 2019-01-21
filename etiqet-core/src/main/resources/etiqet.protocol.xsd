@@ -38,7 +38,7 @@
 
     <xs:complexType name="Configuration">
         <xs:sequence>
-            <xs:element name="protocols">
+            <xs:element name="protocols" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation xml:lang="en">List of protocols to be included in Etiqet</xs:documentation>
                 </xs:annotation>
@@ -68,6 +68,13 @@
                     <xs:sequence>
                         <xs:element name="server" minOccurs="1" type="Server"/>
                     </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="browsers" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element ref="browser"/>
+                    </xs:choice>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
@@ -435,6 +442,56 @@
                 </xs:assert>
             </xs:extension>
         </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:element name="browser" type="Browser"/>
+
+    <xs:complexType name="Browser">
+        <xs:sequence minOccurs="0">
+            <xs:element name="options" type="BrowserOptions"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <!--TODO-->
+                <xs:documentation xml:lang="en">Name to give the browser</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="driver" type="xs:string" use="required">
+            <xs:annotation>
+                <!--TODO-->
+                <xs:documentation xml:lang="en">Path to the browsers driver</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="impl" type="xs:string" use="required">
+            <xs:annotation>
+                <!--TODO-->
+                <xs:documentation xml:lang="en">Class implementation of browser</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="BrowserOptions">
+        <xs:annotation>
+            <xs:documentation>Define browser settings</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="headless" minOccurs="0" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>Should browser run without graphical enviroment</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="screenshotOnFail" minOccurs="0" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>Screenshot of a failed step will be saved to screenshots/fail when true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="windowSize" minOccurs="0" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Window size in format *width*x*height* eg: 1920x1080</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+        </xs:all>
     </xs:complexType>
 
 </xs:schema>

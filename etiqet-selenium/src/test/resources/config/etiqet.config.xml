@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etiqetConfiguration xmlns="http://www.neueda.com/etiqet">
+    <browsers>
+        <browser name="firefox-headless" driver="src/resources/geckodriver" impl="com.neueda.etiqet.selenium.browsers.FirefoxBrowser">
+            <options>
+                <headless>true</headless>
+                <screenshotOnFail>true</screenshotOnFail>
+            </options>
+        </browser>
+        <browser name="firefox-1" driver="src/main/resources/drivers/geckodriver" impl="com.neueda.etiqet.selenium.browsers.FirefoxBrowser">
+            <options>
+                <windowSize>1920x1080</windowSize>
+            </options>
+        </browser>
+        <browser name="chrome-1" driver="src/main/resources/drivers/chromedriver" impl="com.neueda.etiqet.selenium.browsers.ChromeBrowser">
+            <options>
+                <windowSize>1920x1080</windowSize>
+            </options>
+        </browser>
+        <browser name="chrome-headless" driver="src/main/resources/drivers/chromedriver" impl="com.neueda.etiqet.selenium.browsers.ChromeBrowser">
+            <options>
+                <headless>true</headless>
+                <windowSize>1920x1080</windowSize>
+                <screenshotOnFail>true</screenshotOnFail>
+            </options>
+        </browser>
+    </browsers>
+</etiqetConfiguration>

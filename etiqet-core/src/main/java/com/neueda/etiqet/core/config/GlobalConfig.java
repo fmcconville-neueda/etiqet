@@ -1,5 +1,6 @@
 package com.neueda.etiqet.core.config;
 
+import com.neueda.etiqet.core.browser.BrowserBase;
 import com.neueda.etiqet.core.client.Client;
 import com.neueda.etiqet.core.client.ClientFactory;
 import com.neueda.etiqet.core.common.Environment;
@@ -8,6 +9,8 @@ import com.neueda.etiqet.core.config.dtos.ClientConfig;
 import com.neueda.etiqet.core.config.dtos.ClientImpl;
 import com.neueda.etiqet.core.config.dtos.EtiqetConfiguration;
 import com.neueda.etiqet.core.config.dtos.Protocol;
+import com.neueda.etiqet.core.config.dtos.BrowserImpl;
+import com.neueda.etiqet.core.config.dtos.BrowserOptions;
 import com.neueda.etiqet.core.config.xml.XmlParser;
 import com.neueda.etiqet.core.message.config.ProtocolConfig;
 import com.neueda.etiqet.core.server.Server;
@@ -19,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.neueda.etiqet.core.common.ConfigConstants.DEFAULT_CONFIG_VARIABLE;
+import static junit.framework.TestCase.fail;
 
 public class GlobalConfig {
 
@@ -35,6 +39,8 @@ public class GlobalConfig {
     private Map<String, Client> clients = new HashMap<>();
 
     private Map<String, Server> servers = new HashMap<>();
+
+    private Map<String, BrowserBase> browsers = new HashMap<>();
 
     public static GlobalConfig getInstance() throws EtiqetException {
         if(!Environment.isEnvVarSet(DEFAULT_CONFIG_VARIABLE)) {
@@ -81,6 +87,13 @@ public class GlobalConfig {
                 Server server = ServerFactory.create(serverImpl, serverDetail.getConfigPath());
                 servers.put(serverDetail.getName(), server);
             }
+
+            for(BrowserImpl browserDetail : config.getBrowsers()){
+                BrowserBase browser = (BrowserBase) Class.forName(browserDetail.getImpl())
+                        .getConstructor(BrowserOptions.class, String.class)
+                        .newInstance(browserDetail.getOptions(), browserDetail.getDriver());
+                browsers.put(browserDetail.getName(), browser);
+            }
         } catch (Exception e) {
             String msg = "Error reading global configuration file " + getConfigPath();
             LOG.error(msg, e);
@@ -122,5 +135,18 @@ public class GlobalConfig {
 
     public String getConfigPath() {
         return configPath;
+    }
+
+
+    public Map<String, BrowserBase> getBrowsers(){
+        return browsers;
+    }
+
+    public BrowserBase getBrowser(String browserName){
+        BrowserBase browser = browsers.get(browserName);
+        if (browser ==  null){
+            fail("BrowserBase with key '"+browserName+"' has not been defined");
+        }
+        return browser;
     }
 }
